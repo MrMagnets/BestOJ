@@ -1,10 +1,10 @@
 #pragma once
-#include <bits/stdc++.h>
+#include <string>
 /*
 * @file BestOJ.h
-* @brief BestOJ ¸üºÃµÄOJ¿â
-* @author Magnet ´ÅÌú
-* @version Beta 1.0 
+* @brief BestOJ å¸¸ç”¨çš„OJå‡½æ•°åº“
+* @author Magnet
+* @version Beta 1.0
 */
 namespace BestOJ
 {
@@ -19,9 +19,9 @@ namespace BestOJ
 	long long fBase(long long n,int base);//2 <= Base <= 8
 	long long Permu(long long n,long long m);
 	long long Combi(long long n,long long m);
-	long long fact(long long n);        
-	long long fib(long long n);            
-	bool isPalind(long long n);     
+	long long fact(long long n);
+	long long fib(long long n);
+	bool isPalind(long long n);
     long long maxVal(long long a[], int n);
     long long minVal(long long a[], int n);
     long long sumArr(long long a[], int n);
