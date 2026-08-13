@@ -47,4 +47,14 @@ namespace BestOJ
     bool isLeapYear(int y);
     int daysInMonth(int y, int m);
     bool isValidDate(int y, int m, int d);
+    bool isSorted(long long a[], int n);
+    int findIndex(long long a[], int n, long long x);
+    bool isPalindromeStr(const std::string& str);
+    int countWords(const std::string& str);
+    long long cube(long long n);
+    bool isPerfectSquare(long long n);
+    bool isPerfectCube(long long n);
+    bool isEvenBit(long long n);
+    int dayOfWeek(int y, int m, int d);
+    int daysBetween(int y1, int m1, int d1, int y2, int m2, int d2);
 }

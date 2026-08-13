@@ -543,4 +543,170 @@ namespace BestOJ
 
         return d <= maxDay;
     }
+        // ============================================
+    // 40. 判断数组是否升序
+    // ============================================
+    bool isSorted(long long a[], int n)
+    {
+        if (n <= 1) return true;
+        for (int i = 1; i < n; i++)
+        {
+            if (a[i] < a[i - 1]) return false;
+        }
+        return true;
+    }
+
+    // ============================================
+    // 41. 查找元素首次出现位置（不存在返回 -1）
+    // ============================================
+    int findIndex(long long a[], int n, long long x)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            if (a[i] == x) return i;
+        }
+        return -1;
+    }
+
+    // ============================================
+    // 42. 判断字符串是否为回文
+    // ============================================
+    bool isPalindromeStr(const std::string& str)
+    {
+        int left = 0;
+        int right = str.length() - 1;
+        while (left < right)
+        {
+            if (str[left] != str[right]) return false;
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    // ============================================
+    // 43. 统计单词数量（以空格分隔）
+    // ============================================
+    int countWords(const std::string& str)
+    {
+        if (str.empty()) return 0;
+
+        int count = 0;
+        bool inWord = false;
+
+        for (char c : str)
+        {
+            if (c == ' ' || c == '\t' || c == '\n')
+            {
+                inWord = false;
+            }
+            else if (!inWord)
+            {
+                inWord = true;
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // ============================================
+    // 44. 立方
+    // ============================================
+    long long cube(long long n)
+    {
+        return n * n * n;
+    }
+
+    // ============================================
+    // 45. 判断完全平方数
+    // ============================================
+    bool isPerfectSquare(long long n)
+    {
+        if (n < 0) return false;
+        if (n == 0 || n == 1) return true;
+
+        long long left = 1, right = n;
+        while (left <= right)
+        {
+            long long mid = left + (right - left) / 2;
+            long long sq = mid * mid;
+            if (sq == n) return true;
+            if (sq < n) left = mid + 1;
+            else right = mid - 1;
+        }
+        return false;
+    }
+
+    // ============================================
+    // 46. 判断完全立方数
+    // ============================================
+    bool isPerfectCube(long long n)
+    {
+        if (n < 0) n = -n;
+        if (n == 0 || n == 1) return true;
+
+        long long left = 1, right = n;
+        while (left <= right)
+        {
+            long long mid = left + (right - left) / 2;
+            long long cb = mid * mid * mid;
+            if (cb == n) return true;
+            if (cb < n) left = mid + 1;
+            else right = mid - 1;
+        }
+        return false;
+    }
+
+    // ============================================
+    // 47. 用位运算判断偶数
+    // ============================================
+    bool isEvenBit(long long n)
+    {
+        return (n & 1) == 0;
+    }
+
+    // ============================================
+    // 48. 计算星期几（0=周日, 1=周一, ... 6=周六）
+    // ============================================
+    int dayOfWeek(int y, int m, int d)
+    {
+        // 使用基姆拉尔森公式
+        if (m < 3)
+        {
+            m += 12;
+            y--;
+        }
+        int c = y / 100;
+        int year = y % 100;
+        int w = (d + 2 * m + 3 * (m + 1) / 5 + year + year / 4 + c / 4 + 5 * c) % 7;
+        return w;
+    }
+
+    // ============================================
+    // 49. 计算两个日期相差的天数
+    // ============================================
+    int daysBetween(int y1, int m1, int d1, int y2, int m2, int d2)
+    {
+        // 将日期转换为总天数
+        auto daysSinceEpoch = [](int y, int m, int d)
+        {
+            int days = 0;
+            // 从公元1年开始累加（简化版，不考虑公元前的复杂情况）
+            // 这里只处理正数年份，且 y1/y2 >= 1
+            for (int i = 1; i < y; i++)
+            {
+                days += isLeapYear(i) ? 366 : 365;
+            }
+            for (int i = 1; i < m; i++)
+            {
+                days += daysInMonth(y, i);
+            }
+            days += d - 1;
+            return days;
+        };
+
+        int days1 = daysSinceEpoch(y1, m1, d1);
+        int days2 = daysSinceEpoch(y2, m2, d2);
+        return days2 - days1;
+    }
 }
