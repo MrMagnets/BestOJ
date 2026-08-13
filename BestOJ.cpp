@@ -3,31 +3,33 @@
 #include <algorithm>
 #include <string>
 
-using namespace std;
-
 namespace BestOJ
 {
     // ============================================
-    // 1. ÃİÔËËã a^b
+    // 1. å¿«é€Ÿå¹‚ a^b
     // ============================================
     long long power(long long a, long long b)
     {
+        if (b < 0) return 0;
+
         long long result = 1;
-        for (long long i = 0; i < b; i++)
+        while (b > 0)
         {
-            result *= a;
+            if (b & 1) result *= a;
+            a *= a;
+            b >>= 1;
         }
         return result;
     }
-    
+
     // ============================================
-    // 2. ×î´ó¹«Ô¼Êı£¨Õ·×ªÏà³ı·¨£©
+    // 2. æœ€å¤§å…¬çº¦æ•°ï¼ˆè¾—è½¬ç›¸é™¤æ³•ï¼‰
     // ============================================
     long long gcd(long long a, long long b)
     {
         if (a < 0) a = -a;
         if (b < 0) b = -b;
-        
+
         while (b != 0)
         {
             long long temp = b;
@@ -36,26 +38,26 @@ namespace BestOJ
         }
         return a;
     }
-    
+
     // ============================================
-    // 3. ×îĞ¡¹«±¶Êı
+    // 3. æœ€å°å…¬å€æ•°
     // ============================================
     long long lcm(long long a, long long b)
     {
         if (a == 0 || b == 0) return 0;
         return a / gcd(a, b) * b;
     }
-    
+
     // ============================================
-    // 4. È¡Ä£ÃİÔËËã (a^b) % mod
+    // 4. å–æ¨¡å¿«é€Ÿå¹‚ (a^b) % mod
     // ============================================
     long long pmod(long long a, long long b, long long mod)
     {
         if (mod == 1) return 0;
-        
+
         long long result = 1;
         a %= mod;
-        
+
         while (b > 0)
         {
             if (b & 1)
@@ -67,31 +69,30 @@ namespace BestOJ
         }
         return result;
     }
-    
+
     // ============================================
-    // 5. ÅĞ¶ÏÖÊÊı
+    // 5. åˆ¤æ–­ç´ æ•°
     // ============================================
     bool isPrime(long long n)
     {
         if (n <= 1) return false;
         if (n == 2) return true;
         if (n % 2 == 0) return false;
-        
-        long long limit = (long long)sqrt(n);
-        for (long long i = 3; i <= limit; i += 2)
+
+        for (long long i = 3; i <= n / i; i += 2)
         {
             if (n % i == 0) return false;
         }
         return true;
     }
-    
+
     // ============================================
-    // 6. ¸÷Î»Êı×ÖÖ®ºÍ
+    // 6. å„ä½æ•°å­—ä¹‹å’Œ
     // ============================================
     long long numSum(long long n)
     {
         if (n < 0) n = -n;
-        
+
         long long sum = 0;
         while (n > 0)
         {
@@ -100,14 +101,14 @@ namespace BestOJ
         }
         return sum;
     }
-    
+
     // ============================================
-    // 7. Êı×Ö·´×ª
+    // 7. æ•°å­—åè½¬
     // ============================================
     long long rvsNum(long long n)
     {
         if (n < 0) n = -n;
-        
+
         long long reversed = 0;
         while (n > 0)
         {
@@ -116,25 +117,26 @@ namespace BestOJ
         }
         return reversed;
     }
-    
+
     // ============================================
-    // 8. Ê®½øÖÆ ¡ú ÈÎÒâ½øÖÆ (2~8)
+    // 8. åè¿›åˆ¶ è½¬ base è¿›åˆ¶ (2~8)
+    //    æ³¨ï¼šbase è¶Šç•Œæ—¶è¿”å› -1ï¼Œè¯·ä¿è¯ 2<=base<=8
     // ============================================
     long long tBase(long long n, int base)
     {
         if (base < 2 || base > 8) return -1;
         if (n == 0) return 0;
-        
+
         long long result = 0;
         long long multiplier = 1;
         bool isNegative = false;
-        
+
         if (n < 0)
         {
             isNegative = true;
             n = -n;
         }
-        
+
         while (n > 0)
         {
             int digit = n % base;
@@ -142,48 +144,49 @@ namespace BestOJ
             multiplier *= 10;
             n /= base;
         }
-        
+
         return isNegative ? -result : result;
     }
-    
+
     // ============================================
-    // 9. ÈÎÒâ½øÖÆ ¡ú Ê®½øÖÆ (2~8)
+    // 9. base è¿›åˆ¶ è½¬ åè¿›åˆ¶ (2~8)
+    //    æ³¨ï¼šbase è¶Šç•Œæˆ–å«éæ³•æ•°å­—æ—¶è¿”å› -1
     // ============================================
     long long fBase(long long n, int base)
     {
         if (base < 2 || base > 8) return -1;
         if (n == 0) return 0;
-        
+
         long long result = 0;
         long long multiplier = 1;
         bool isNegative = false;
-        
+
         if (n < 0)
         {
             isNegative = true;
             n = -n;
         }
-        
+
         while (n > 0)
         {
             int digit = n % 10;
             if (digit >= base) return -1;
-            
+
             result += digit * multiplier;
             multiplier *= base;
             n /= 10;
         }
-        
+
         return isNegative ? -result : result;
     }
-    
+
     // ============================================
-    // 10. ÅÅÁĞÊı P(n,m)
+    // 10. æ’åˆ—æ•° P(n,m)
     // ============================================
     long long Permu(long long n, long long m)
     {
         if (m < 0 || m > n) return 0;
-        
+
         long long result = 1;
         for (long long i = n; i > n - m; i--)
         {
@@ -191,15 +194,15 @@ namespace BestOJ
         }
         return result;
     }
-    
+
     // ============================================
-    // 11. ×éºÏÊı C(n,m)
+    // 11. ç»„åˆæ•° C(n,m)
     // ============================================
     long long Combi(long long n, long long m)
     {
         if (m < 0 || m > n) return 0;
         if (m > n - m) m = n - m;
-        
+
         long long result = 1;
         for (long long i = 1; i <= m; i++)
         {
@@ -207,15 +210,15 @@ namespace BestOJ
         }
         return result;
     }
-    
+
     // ============================================
-    // 12. ½×³Ë n!
+    // 12. é˜¶ä¹˜ n!
     // ============================================
     long long fact(long long n)
     {
         if (n < 0) return -1;
         if (n == 0 || n == 1) return 1;
-        
+
         long long result = 1;
         for (long long i = 2; i <= n; i++)
         {
@@ -223,16 +226,16 @@ namespace BestOJ
         }
         return result;
     }
-    
+
     // ============================================
-    // 13. ì³²¨ÄÇÆõÊıÁĞµÚ n Ïî
+    // 13. æ–æ³¢é‚£å¥‘æ•°åˆ—çš„ç¬¬ n é¡¹
     // ============================================
     long long fib(long long n)
     {
         if (n < 0) return -1;
         if (n == 0) return 0;
         if (n == 1 || n == 2) return 1;
-        
+
         long long a = 0, b = 1;
         for (long long i = 2; i <= n; i++)
         {
@@ -242,18 +245,18 @@ namespace BestOJ
         }
         return b;
     }
-    
+
     // ============================================
-    // 14. »ØÎÄÊıÅĞ¶Ï
+    // 14. å›æ–‡æ•°åˆ¤æ–­
     // ============================================
     bool isPalind(long long n)
     {
         if (n < 0) return false;
         return n == rvsNum(n);
     }
-    
-        // ============================================
-    // 15. Êı×é×î´óÖµ
+
+    // ============================================
+    // 15. æ•°ç»„æœ€å¤§å€¼
     // ============================================
     long long maxVal(long long a[], int n)
     {
@@ -267,7 +270,7 @@ namespace BestOJ
     }
 
     // ============================================
-    // 16. Êı×é×îĞ¡Öµ
+    // 16. æ•°ç»„æœ€å°å€¼
     // ============================================
     long long minVal(long long a[], int n)
     {
@@ -281,7 +284,7 @@ namespace BestOJ
     }
 
     // ============================================
-    // 17. Êı×éÇóºÍ
+    // 17. æ•°ç»„æ±‚å’Œ
     // ============================================
     long long sumArr(long long a[], int n)
     {
@@ -294,7 +297,7 @@ namespace BestOJ
     }
 
     // ============================================
-    // 18. Êı×éÆ½¾ùÖµ
+    // 18. æ•°ç»„å¹³å‡å€¼
     // ============================================
     double avgArr(long long a[], int n)
     {
@@ -303,18 +306,18 @@ namespace BestOJ
     }
 
     // ============================================
-    // 19. ·´×ªÊı×é
+    // 19. åè½¬æ•°ç»„
     // ============================================
     void reverseArr(long long a[], int n)
     {
         for (int i = 0; i < n / 2; i++)
         {
-            swap(a[i], a[n - i - 1]);
+            std::swap(a[i], a[n - i - 1]);
         }
     }
 
     // ============================================
-    // 20. Í³¼ÆÔªËØ³öÏÖ´ÎÊı
+    // 20. ç»Ÿè®¡å…ƒç´ å‡ºç°æ¬¡æ•°
     // ============================================
     int countOccur(long long a[], int n, long long x)
     {
@@ -327,11 +330,11 @@ namespace BestOJ
     }
 
     // ============================================
-    // 21. ×ª´óĞ´
+    // 21. è½¬å¤§å†™
     // ============================================
-    string toUpper(const string& str)
+    std::string toUpper(const std::string& str)
     {
-        string result = str;
+        std::string result = str;
         for (char& c : result)
         {
             if (c >= 'a' && c <= 'z') c -= 32;
@@ -340,11 +343,11 @@ namespace BestOJ
     }
 
     // ============================================
-    // 22. ×ªĞ¡Ğ´
+    // 22. è½¬å°å†™
     // ============================================
-    string toLower(const string& str)
+    std::string toLower(const std::string& str)
     {
-        string result = str;
+        std::string result = str;
         for (char& c : result)
         {
             if (c >= 'A' && c <= 'Z') c += 32;
@@ -353,73 +356,73 @@ namespace BestOJ
     }
 
     // ============================================
-    // 23. ×Ö·û´®³¤¶È
+    // 23. å­—ç¬¦ä¸²é•¿åº¦
     // ============================================
-    int strLen(const string& str)
+    int strLen(const std::string& str)
     {
         return (int)str.length();
     }
 
     // ============================================
-    // 24. ·´×ª×Ö·û´®
+    // 24. åè½¬å­—ç¬¦ä¸²
     // ============================================
-    string strReverse(const string& str)
+    std::string strReverse(const std::string& str)
     {
-        string result = str;
+        std::string result = str;
         int n = result.length();
         for (int i = 0; i < n / 2; i++)
         {
-            swap(result[i], result[n - i - 1]);
+            std::swap(result[i], result[n - i - 1]);
         }
         return result;
     }
 
     // ============================================
-    // 25. ×ÖÄ¸ÒìÎ»´ÊÅĞ¶Ï
+    // 25. å­—æ¯å¼‚ä½è¯åˆ¤æ–­
     // ============================================
-    bool isAnagram(const string& a, const string& b)
+    bool isAnagram(const std::string& a, const std::string& b)
     {
         if (a.length() != b.length()) return false;
 
-        string s1 = toLower(a);
-        string s2 = toLower(b);
+        std::string s1 = toLower(a);
+        std::string s2 = toLower(b);
 
-        sort(s1.begin(), s1.end());
-        sort(s2.begin(), s2.end());
+        std::sort(s1.begin(), s1.end());
+        std::sort(s2.begin(), s2.end());
 
         return s1 == s2;
     }
 
     // ============================================
-    // 26. Í³¼ÆÔªÒô×ÖÄ¸Êı
+    // 26. ç»Ÿè®¡å…ƒéŸ³å­—æ¯æ•°
     // ============================================
-    int countVowels(const string& str)
+    int countVowels(const std::string& str)
     {
         int count = 0;
-        string vowels = "aeiouAEIOU";
+        static const std::string vowels = "aeiouAEIOU";
         for (char c : str)
         {
-            if (vowels.find(c) != string::npos) count++;
+            if (vowels.find(c) != std::string::npos) count++;
         }
         return count;
     }
 
     // ============================================
-    // 27. Í³¼Æ¸¨Òô×ÖÄ¸Êı
+    // 27. ç»Ÿè®¡è¾…éŸ³å­—æ¯æ•°
     // ============================================
-    int countConsonants(const string& str)
+    int countConsonants(const std::string& str)
     {
         int count = 0;
-        string consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ";
+        static const std::string consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ";
         for (char c : str)
         {
-            if (consonants.find(c) != string::npos) count++;
+            if (consonants.find(c) != std::string::npos) count++;
         }
         return count;
     }
 
     // ============================================
-    // 28. ¾ø¶ÔÖµ
+    // 28. ç»å¯¹å€¼
     // ============================================
     long long absInt(long long n)
     {
@@ -427,23 +430,23 @@ namespace BestOJ
     }
 
     // ============================================
-    // 29. ÈıÊı×î´óÖµ
+    // 29. ä¸‰æ•°æœ€å¤§å€¼
     // ============================================
     long long max3(long long a, long long b, long long c)
     {
-        return max(max(a, b), c);
+        return std::max(std::max(a, b), c);
     }
 
     // ============================================
-    // 30. ÈıÊı×îĞ¡Öµ
+    // 30. ä¸‰æ•°æœ€å°å€¼
     // ============================================
     long long min3(long long a, long long b, long long c)
     {
-        return min(min(a, b), c);
+        return std::min(std::min(a, b), c);
     }
 
     // ============================================
-    // 31. ÅĞ¶ÏÅ¼Êı
+    // 31. åˆ¤æ–­å¶æ•°
     // ============================================
     bool isEven(long long n)
     {
@@ -451,7 +454,7 @@ namespace BestOJ
     }
 
     // ============================================
-    // 32. ÅĞ¶ÏÆæÊı
+    // 32. åˆ¤æ–­å¥‡æ•°
     // ============================================
     bool isOdd(long long n)
     {
@@ -459,7 +462,7 @@ namespace BestOJ
     }
 
     // ============================================
-    // 33. Æ½·½
+    // 33. å¹³æ–¹
     // ============================================
     long long sqr(long long n)
     {
@@ -467,7 +470,7 @@ namespace BestOJ
     }
 
     // ============================================
-    // 34. ÅĞ¶ÏÊÇ·ñÎª 2 µÄÃİ
+    // 34. åˆ¤æ–­æ˜¯å¦ä¸º 2 çš„å¹‚
     // ============================================
     bool isPowerOfTwo(long long n)
     {
@@ -476,35 +479,37 @@ namespace BestOJ
     }
 
     // ============================================
-    // 35. ¶ş½øÖÆÖĞ 1 µÄ¸öÊı£¨ººÃ÷ÖØÁ¿£©
+    // 35. äºŒè¿›åˆ¶ä¸­ 1 çš„ä¸ªæ•°ï¼ˆè´Ÿæ•°æŒ‰è¡¥ç ç»Ÿè®¡ï¼‰
     // ============================================
     int countBits(long long n)
     {
+        unsigned long long x = (unsigned long long)n;
         int count = 0;
-        while (n > 0)
+        while (x > 0)
         {
-            count += n & 1;
-            n >>= 1;
+            x &= x - 1;
+            count++;
         }
         return count;
     }
 
     // ============================================
-    // 36. ·´×ª¶ş½øÖÆÎ»£¨32Î»£©
+    // 36. åè½¬ä½ 32 ä½æ¯”ç‰¹
     // ============================================
     long long reverseBits(long long n)
     {
-        long long result = 0;
+        unsigned long long x = (unsigned long long)n;
+        unsigned long long result = 0;
         for (int i = 0; i < 32; i++)
         {
-            result = (result << 1) | (n & 1);
-            n >>= 1;
+            result = (result << 1) | (x & 1);
+            x >>= 1;
         }
-        return result;
+        return (long long)result;
     }
 
     // ============================================
-    // 37. ÅĞ¶ÏÈòÄê
+    // 37. åˆ¤æ–­é—°å¹´
     // ============================================
     bool isLeapYear(int y)
     {
@@ -513,7 +518,7 @@ namespace BestOJ
     }
 
     // ============================================
-    // 38. ÔÂ·İÌìÊı
+    // 38. æœˆä»½å¤©æ•°
     // ============================================
     int daysInMonth(int y, int m)
     {
@@ -526,7 +531,7 @@ namespace BestOJ
     }
 
     // ============================================
-    // 39. ÅĞ¶ÏÈÕÆÚÊÇ·ñºÏ·¨
+    // 39. åˆ¤æ–­æ—¥æœŸæ˜¯å¦åˆæ³•
     // ============================================
     bool isValidDate(int y, int m, int d)
     {
