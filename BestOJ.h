@@ -60,4 +60,19 @@ namespace BestOJ
     bool isDescending(long long a[], int n);
     bool isPrimeFast(long long n);
     std::string replaceChar(const std::string& str, char oldChar, char newChar);
+	void quickSort(long long a[], int l, int r);
+	void mergeSort(long long a[], int l, int r);
+	int binarySearch(long long a[], int n, long long x);
+	std::string longestCommonPrefix(const std::string& a, const std::string& b);
+	int editDistance(const std::string& a, const std::string& b);
+	long long maxSubarraySum(long long a[], int n);
+	void rotateArray(long long a[], int n, int k);
+	int removeDuplicates(long long a[], int n);
+	bool isArmstrong(long long n);
+	long long gcdExtended(long long a, long long b, long long& x, long long& y);
+	long long modInverse(long long a, long long mod);
+	long long lowbit(long long n);
+	bool isPowerOfFour(long long n);
+	bool nextPermutation(long long a[], int n);
+	int age(int y1, int m1, int d1, int y2, int m2, int d2);
 }
