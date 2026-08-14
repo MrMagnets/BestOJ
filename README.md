@@ -72,7 +72,6 @@ using namespace BestOJ;
 ```
 
 ## 函数列表
-## 函数列表
 
 ### 幂运算
 | 函数 | 说明 |
@@ -136,7 +135,6 @@ using namespace BestOJ;
 | `isSorted(a, n)` | 判断数组是否升序 |
 | `isDescending(a, n)` | 判断数组是否降序 |
 | `findIndex(a, n, x)` | 查找元素首次出现位置 |
-| `allPositive(a, n)` | 判断数组是否全部为正数 |
 | `maxSubarraySum(a, n)` | 最大子数组和（Kadane 算法） |
 | `rotateArray(a, n, k)` | 循环右移 k 位 |
 | `removeDuplicates(a, n)` | 原地去重（返回去重后长度） |
@@ -154,7 +152,6 @@ using namespace BestOJ;
 | `isPalindromeStr(str)` | 判断字符串是否为回文 |
 | `countWords(str)` | 统计单词数量 |
 | `replaceChar(str, old, new)` | 替换字符串中所有指定字符 |
-| `removeSpaces(str)` | 去除字符串中所有空格 |
 | `longestCommonPrefix(a, b)` | 求两个字符串的最长公共前缀 |
 | `editDistance(a, b)` | 编辑距离（Levenshtein Distance） |
 
