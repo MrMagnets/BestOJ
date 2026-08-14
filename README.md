@@ -1,6 +1,6 @@
 # BestOJ - Best Optimized Journeys: C++ competitive programming snippets & function templates.
 # 好竞旅 - 最好的竞赛之旅：C++ 环境一键配置及常用库
-
+## 官方交流群（QQ）：1105319703
 一个适用于算法竞赛（OI / ACM）的 C++ 常用函数库与安装程序，一键安装vscode（仅windows）并提供共 **54 个**常用函数，覆盖数组、字符串、数论、位运算、日期等类别。安装后可直接 `#include <BestOJ.h>` 使用。
 （可以仅安装vscode）
 
