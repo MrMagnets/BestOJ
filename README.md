@@ -1,9 +1,11 @@
-# BestOJ
+# BestOJ - Best Optimized Journeys: C++ competitive programming snippets & function templates.
+# 好竞旅 - 最好的竞赛之旅：C++ 环境一键配置及常用库
 
-一个适用于算法竞赛（OI / ACM）的 C++ 常用函数库，共 **54 个**常用函数，覆盖数组、字符串、数论、位运算、日期等类别。安装后可直接 `#include <BestOJ.h>` 使用。
+一个适用于算法竞赛（OI / ACM）的 C++ 常用函数库与安装程序，一键安装vscode（仅windows）并提供共 **54 个**常用函数，覆盖数组、字符串、数论、位运算、日期等类别。安装后可直接 `#include <BestOJ.h>` 使用。
+（可以仅安装vscode）
 
 ## 特性
-
+- 及其方便：小白也能上手
 - 零依赖：仅依赖 C++ 标准库，不包含任何 `bits/stdc++.h` 万能头
 - 不污染全局命名空间，所有函数均在 `BestOJ` 命名空间内
 - 提供 Windows / Linux 一键安装脚本
@@ -12,7 +14,8 @@
 ## 安装
 
 ### Windows
-
+右键-以管理员身份运行BestOJ.bat。
+（可选-安装BestOJ库）
 双击运行 `Fast-Install.bat`，按提示选择：
 
 - `[1]` 自动检测并安装到 gcc 默认 include/lib 目录
@@ -45,6 +48,8 @@ g++ main.cpp BestOJ.cpp -o main
 ```
 
 ## 使用方法
+查看README_使用说明以了解如何使用vsocde。
+查看本项目readme.md以了解如何使用BestOJ库。
 
 ```cpp
 #include <BestOJ.h>
