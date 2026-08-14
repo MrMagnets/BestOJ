@@ -57,4 +57,7 @@ namespace BestOJ
     bool isEvenBit(long long n);
     int dayOfWeek(int y, int m, int d);
     int daysBetween(int y1, int m1, int d1, int y2, int m2, int d2);
+    bool isDescending(long long a[], int n);
+    bool isPrimeFast(long long n);
+    std::string replaceChar(const std::string& str, char oldChar, char newChar);
 }

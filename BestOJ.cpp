@@ -709,4 +709,45 @@ namespace BestOJ
         int days2 = daysSinceEpoch(y2, m2, d2);
         return days2 - days1;
     }
+        // ============================================
+    // 50. 判断数组是否降序
+    // ============================================
+    bool isDescending(long long a[], int n)
+    {
+        if (n <= 1) return true;
+        for (int i = 1; i < n; i++)
+        {
+            if (a[i] > a[i - 1]) return false;
+        }
+        return true;
+    }
+
+    // ============================================
+    // 51. 快速判断质数（6k±1 优化）
+    // ============================================
+    bool isPrimeFast(long long n)
+    {
+        if (n <= 1) return false;
+        if (n == 2 || n == 3) return true;
+        if (n % 2 == 0 || n % 3 == 0) return false;
+
+        for (long long i = 5; i * i <= n; i += 6)
+        {
+            if (n % i == 0 || n % (i + 2) == 0) return false;
+        }
+        return true;
+    }
+
+    // ============================================
+    // 52. 替换字符串中所有指定字符
+    // ============================================
+    std::string replaceChar(const std::string& str, char oldChar, char newChar)
+    {
+        std::string result = str;
+        for (char& c : result)
+        {
+            if (c == oldChar) c = newChar;
+        }
+        return result;
+    }
 }
