@@ -2,974 +2,1161 @@
 #include <cmath>
 #include <algorithm>
 #include <string>
+#include <vector>
 
 namespace BestOJ
 {
-    // ============================================
-    // 1. å¿«é€Ÿå¹‚ a^b
-    // ============================================
-    long long power(long long a, long long b)
-    {
-        if (b < 0) return 0;
-
-        long long result = 1;
-        while (b > 0)
-        {
-            if (b & 1) result *= a;
-            a *= a;
-            b >>= 1;
-        }
-        return result;
-    }
-
-    // ============================================
-    // 2. æœ€å¤§å…¬çº¦æ•°ï¼ˆè¾—è½¬ç›¸é™¤æ³•ï¼‰
-    // ============================================
-    long long gcd(long long a, long long b)
-    {
-        if (a < 0) a = -a;
-        if (b < 0) b = -b;
-
-        while (b != 0)
-        {
-            long long temp = b;
-            b = a % b;
-            a = temp;
-        }
-        return a;
-    }
-
-    // ============================================
-    // 3. æœ€å°å…¬å€æ•°
-    // ============================================
-    long long lcm(long long a, long long b)
-    {
-        if (a == 0 || b == 0) return 0;
-        return a / gcd(a, b) * b;
-    }
-
-    // ============================================
-    // 4. å–æ¨¡å¿«é€Ÿå¹‚ (a^b) % mod
-    // ============================================
-    long long pmod(long long a, long long b, long long mod)
-    {
-        if (mod == 1) return 0;
-
-        long long result = 1;
-        a %= mod;
-
-        while (b > 0)
-        {
-            if (b & 1)
-            {
-                result = (result * a) % mod;
-            }
-            a = (a * a) % mod;
-            b >>= 1;
-        }
-        return result;
-    }
-
-    // ============================================
-    // 5. åˆ¤æ–­ç´ æ•°
-    // ============================================
-    bool isPrime(long long n)
-    {
-        if (n <= 1) return false;
-        if (n == 2) return true;
-        if (n % 2 == 0) return false;
-
-        for (long long i = 3; i <= n / i; i += 2)
-        {
-            if (n % i == 0) return false;
-        }
-        return true;
-    }
-
-    // ============================================
-    // 6. å„ä½æ•°å­—ä¹‹å’Œ
-    // ============================================
-    long long numSum(long long n)
-    {
-        if (n < 0) n = -n;
-
-        long long sum = 0;
-        while (n > 0)
-        {
-            sum += n % 10;
-            n /= 10;
-        }
-        return sum;
-    }
-
-    // ============================================
-    // 7. æ•°å­—åè½¬
-    // ============================================
-    long long rvsNum(long long n)
-    {
-        if (n < 0) n = -n;
-
-        long long reversed = 0;
-        while (n > 0)
-        {
-            reversed = reversed * 10 + (n % 10);
-            n /= 10;
-        }
-        return reversed;
-    }
-
-    // ============================================
-    // 8. åè¿›åˆ¶ è½¬ base è¿›åˆ¶ (2~8)
-    //    æ³¨ï¼šbase è¶Šç•Œæ—¶è¿”å› -1ï¼Œè¯·ä¿è¯ 2<=base<=8
-    // ============================================
-    long long tBase(long long n, int base)
-    {
-        if (base < 2 || base > 8) return -1;
-        if (n == 0) return 0;
-
-        long long result = 0;
-        long long multiplier = 1;
-        bool isNegative = false;
-
-        if (n < 0)
-        {
-            isNegative = true;
-            n = -n;
-        }
-
-        while (n > 0)
-        {
-            int digit = n % base;
-            result += digit * multiplier;
-            multiplier *= 10;
-            n /= base;
-        }
-
-        return isNegative ? -result : result;
-    }
-
-    // ============================================
-    // 9. base è¿›åˆ¶ è½¬ åè¿›åˆ¶ (2~8)
-    //    æ³¨ï¼šbase è¶Šç•Œæˆ–å«éæ³•æ•°å­—æ—¶è¿”å› -1
-    // ============================================
-    long long fBase(long long n, int base)
-    {
-        if (base < 2 || base > 8) return -1;
-        if (n == 0) return 0;
-
-        long long result = 0;
-        long long multiplier = 1;
-        bool isNegative = false;
-
-        if (n < 0)
-        {
-            isNegative = true;
-            n = -n;
-        }
-
-        while (n > 0)
-        {
-            int digit = n % 10;
-            if (digit >= base) return -1;
-
-            result += digit * multiplier;
-            multiplier *= base;
-            n /= 10;
-        }
-
-        return isNegative ? -result : result;
-    }
-
-    // ============================================
-    // 10. æ’åˆ—æ•° P(n,m)
-    // ============================================
-    long long Permu(long long n, long long m)
-    {
-        if (m < 0 || m > n) return 0;
-
-        long long result = 1;
-        for (long long i = n; i > n - m; i--)
-        {
-            result *= i;
-        }
-        return result;
-    }
-
-    // ============================================
-    // 11. ç»„åˆæ•° C(n,m)
-    // ============================================
-    long long Combi(long long n, long long m)
-    {
-        if (m < 0 || m > n) return 0;
-        if (m > n - m) m = n - m;
-
-        long long result = 1;
-        for (long long i = 1; i <= m; i++)
-        {
-            result = result * (n - m + i) / i;
-        }
-        return result;
-    }
-
-    // ============================================
-    // 12. é˜¶ä¹˜ n!
-    // ============================================
-    long long fact(long long n)
-    {
-        if (n < 0) return -1;
-        if (n == 0 || n == 1) return 1;
-
-        long long result = 1;
-        for (long long i = 2; i <= n; i++)
-        {
-            result *= i;
-        }
-        return result;
-    }
-
-    // ============================================
-    // 13. æ–æ³¢é‚£å¥‘æ•°åˆ—çš„ç¬¬ n é¡¹
-    // ============================================
-    long long fib(long long n)
-    {
-        if (n < 0) return -1;
-        if (n == 0) return 0;
-        if (n == 1 || n == 2) return 1;
-
-        long long a = 0, b = 1;
-        for (long long i = 2; i <= n; i++)
-        {
-            long long temp = a + b;
-            a = b;
-            b = temp;
-        }
-        return b;
-    }
-
-    // ============================================
-    // 14. å›æ–‡æ•°åˆ¤æ–­
-    // ============================================
-    bool isPalind(long long n)
-    {
-        if (n < 0) return false;
-        return n == rvsNum(n);
-    }
-
-    // ============================================
-    // 15. æ•°ç»„æœ€å¤§å€¼
-    // ============================================
-    long long maxVal(long long a[], int n)
-    {
-        if (n <= 0) return 0;
-        long long result = a[0];
-        for (int i = 1; i < n; i++)
-        {
-            if (a[i] > result) result = a[i];
-        }
-        return result;
-    }
-
-    // ============================================
-    // 16. æ•°ç»„æœ€å°å€¼
-    // ============================================
-    long long minVal(long long a[], int n)
-    {
-        if (n <= 0) return 0;
-        long long result = a[0];
-        for (int i = 1; i < n; i++)
-        {
-            if (a[i] < result) result = a[i];
-        }
-        return result;
-    }
-
-    // ============================================
-    // 17. æ•°ç»„æ±‚å’Œ
-    // ============================================
-    long long sumArr(long long a[], int n)
-    {
-        long long result = 0;
-        for (int i = 0; i < n; i++)
-        {
-            result += a[i];
-        }
-        return result;
-    }
-
-    // ============================================
-    // 18. æ•°ç»„å¹³å‡å€¼
-    // ============================================
-    double avgArr(long long a[], int n)
-    {
-        if (n <= 0) return 0.0;
-        return (double)sumArr(a, n) / n;
-    }
-
-    // ============================================
-    // 19. åè½¬æ•°ç»„
-    // ============================================
-    void reverseArr(long long a[], int n)
-    {
-        for (int i = 0; i < n / 2; i++)
-        {
-            std::swap(a[i], a[n - i - 1]);
-        }
-    }
-
-    // ============================================
-    // 20. ç»Ÿè®¡å…ƒç´ å‡ºç°æ¬¡æ•°
-    // ============================================
-    int countOccur(long long a[], int n, long long x)
-    {
-        int count = 0;
-        for (int i = 0; i < n; i++)
-        {
-            if (a[i] == x) count++;
-        }
-        return count;
-    }
-
-    // ============================================
-    // 21. è½¬å¤§å†™
-    // ============================================
-    std::string toUpper(const std::string& str)
-    {
-        std::string result = str;
-        for (char& c : result)
-        {
-            if (c >= 'a' && c <= 'z') c -= 32;
-        }
-        return result;
-    }
-
-    // ============================================
-    // 22. è½¬å°å†™
-    // ============================================
-    std::string toLower(const std::string& str)
-    {
-        std::string result = str;
-        for (char& c : result)
-        {
-            if (c >= 'A' && c <= 'Z') c += 32;
-        }
-        return result;
-    }
-
-    // ============================================
-    // 23. å­—ç¬¦ä¸²é•¿åº¦
-    // ============================================
-    int strLen(const std::string& str)
-    {
-        return (int)str.length();
-    }
-
-    // ============================================
-    // 24. åè½¬å­—ç¬¦ä¸²
-    // ============================================
-    std::string strReverse(const std::string& str)
-    {
-        std::string result = str;
-        int n = result.length();
-        for (int i = 0; i < n / 2; i++)
-        {
-            std::swap(result[i], result[n - i - 1]);
-        }
-        return result;
-    }
-
-    // ============================================
-    // 25. å­—æ¯å¼‚ä½è¯åˆ¤æ–­
-    // ============================================
-    bool isAnagram(const std::string& a, const std::string& b)
-    {
-        if (a.length() != b.length()) return false;
-
-        std::string s1 = toLower(a);
-        std::string s2 = toLower(b);
-
-        std::sort(s1.begin(), s1.end());
-        std::sort(s2.begin(), s2.end());
-
-        return s1 == s2;
-    }
-
-    // ============================================
-    // 26. ç»Ÿè®¡å…ƒéŸ³å­—æ¯æ•°
-    // ============================================
-    int countVowels(const std::string& str)
-    {
-        int count = 0;
-        static const std::string vowels = "aeiouAEIOU";
-        for (char c : str)
-        {
-            if (vowels.find(c) != std::string::npos) count++;
-        }
-        return count;
-    }
-
-    // ============================================
-    // 27. ç»Ÿè®¡è¾…éŸ³å­—æ¯æ•°
-    // ============================================
-    int countConsonants(const std::string& str)
-    {
-        int count = 0;
-        static const std::string consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ";
-        for (char c : str)
-        {
-            if (consonants.find(c) != std::string::npos) count++;
-        }
-        return count;
-    }
-
-    // ============================================
-    // 28. ç»å¯¹å€¼
-    // ============================================
-    long long absInt(long long n)
-    {
-        return n < 0 ? -n : n;
-    }
-
-    // ============================================
-    // 29. ä¸‰æ•°æœ€å¤§å€¼
-    // ============================================
-    long long max3(long long a, long long b, long long c)
-    {
-        return std::max(std::max(a, b), c);
-    }
-
-    // ============================================
-    // 30. ä¸‰æ•°æœ€å°å€¼
-    // ============================================
-    long long min3(long long a, long long b, long long c)
-    {
-        return std::min(std::min(a, b), c);
-    }
-
-    // ============================================
-    // 31. åˆ¤æ–­å¶æ•°
-    // ============================================
-    bool isEven(long long n)
-    {
-        return n % 2 == 0;
-    }
-
-    // ============================================
-    // 32. åˆ¤æ–­å¥‡æ•°
-    // ============================================
-    bool isOdd(long long n)
-    {
-        return n % 2 != 0;
-    }
-
-    // ============================================
-    // 33. å¹³æ–¹
-    // ============================================
-    long long sqr(long long n)
-    {
-        return n * n;
-    }
-
-    // ============================================
-    // 34. åˆ¤æ–­æ˜¯å¦ä¸º 2 çš„å¹‚
-    // ============================================
-    bool isPowerOfTwo(long long n)
-    {
-        if (n <= 0) return false;
-        return (n & (n - 1)) == 0;
-    }
-
-    // ============================================
-    // 35. äºŒè¿›åˆ¶ä¸­ 1 çš„ä¸ªæ•°ï¼ˆè´Ÿæ•°æŒ‰è¡¥ç ç»Ÿè®¡ï¼‰
-    // ============================================
-    int countBits(long long n)
-    {
-        unsigned long long x = (unsigned long long)n;
-        int count = 0;
-        while (x > 0)
-        {
-            x &= x - 1;
-            count++;
-        }
-        return count;
-    }
-
-    // ============================================
-    // 36. åè½¬ä½ 32 ä½æ¯”ç‰¹
-    // ============================================
-    long long reverseBits(long long n)
-    {
-        unsigned long long x = (unsigned long long)n;
-        unsigned long long result = 0;
-        for (int i = 0; i < 32; i++)
-        {
-            result = (result << 1) | (x & 1);
-            x >>= 1;
-        }
-        return (long long)result;
-    }
-
-    // ============================================
-    // 37. åˆ¤æ–­é—°å¹´
-    // ============================================
-    bool isLeapYear(int y)
-    {
-        if (y < 0) y = -y;
-        return (y % 400 == 0) || (y % 4 == 0 && y % 100 != 0);
-    }
-
-    // ============================================
-    // 38. æœˆä»½å¤©æ•°
-    // ============================================
-    int daysInMonth(int y, int m)
-    {
-        if (m < 1 || m > 12) return -1;
-
-        int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-        if (m == 2 && isLeapYear(y)) return 29;
-        return days[m - 1];
-    }
-
-    // ============================================
-    // 39. åˆ¤æ–­æ—¥æœŸæ˜¯å¦åˆæ³•
-    // ============================================
-    bool isValidDate(int y, int m, int d)
-    {
-        if (m < 1 || m > 12) return false;
-        if (d < 1) return false;
-
-        int maxDay = daysInMonth(y, m);
-        if (maxDay == -1) return false;
-
-        return d <= maxDay;
-    }
-        // ============================================
-    // 40. ï¿½Ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
-    // ============================================
-    bool isSorted(long long a[], int n)
-    {
-        if (n <= 1) return true;
-        for (int i = 1; i < n; i++)
-        {
-            if (a[i] < a[i - 1]) return false;
-        }
-        return true;
-    }
-
-    // ============================================
-    // 41. ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½×´Î³ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½ -1ï¿½ï¿½
-    // ============================================
-    int findIndex(long long a[], int n, long long x)
-    {
-        for (int i = 0; i < n; i++)
-        {
-            if (a[i] == x) return i;
-        }
-        return -1;
-    }
-
-    // ============================================
-    // 42. ï¿½Ğ¶ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½
-    // ============================================
-    bool isPalindromeStr(const std::string& str)
-    {
-        int left = 0;
-        int right = str.length() - 1;
-        while (left < right)
-        {
-            if (str[left] != str[right]) return false;
-            left++;
-            right--;
-        }
-        return true;
-    }
-
-    // ============================================
-    // 43. Í³ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿Õ¸ï¿½Ö¸ï¿½ï¿½ï¿½
-    // ============================================
-    int countWords(const std::string& str)
-    {
-        if (str.empty()) return 0;
-
-        int count = 0;
-        bool inWord = false;
-
-        for (char c : str)
-        {
-            if (c == ' ' || c == '\t' || c == '\n')
-            {
-                inWord = false;
-            }
-            else if (!inWord)
-            {
-                inWord = true;
-                count++;
-            }
-        }
-        return count;
-    }
-
-    // ============================================
-    // 44. ï¿½ï¿½ï¿½ï¿½
-    // ============================================
-    long long cube(long long n)
-    {
-        return n * n * n;
-    }
-
-    // ============================================
-    // 45. ï¿½Ğ¶ï¿½ï¿½ï¿½È«Æ½ï¿½ï¿½ï¿½ï¿½
-    // ============================================
-    bool isPerfectSquare(long long n)
-    {
-        if (n < 0) return false;
-        if (n == 0 || n == 1) return true;
-
-        long long left = 1, right = n;
-        while (left <= right)
-        {
-            long long mid = left + (right - left) / 2;
-            long long sq = mid * mid;
-            if (sq == n) return true;
-            if (sq < n) left = mid + 1;
-            else right = mid - 1;
-        }
-        return false;
-    }
-
-    // ============================================
-    // 46. ï¿½Ğ¶ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    // ============================================
-    bool isPerfectCube(long long n)
-    {
-        if (n < 0) n = -n;
-        if (n == 0 || n == 1) return true;
-
-        long long left = 1, right = n;
-        while (left <= right)
-        {
-            long long mid = left + (right - left) / 2;
-            long long cb = mid * mid * mid;
-            if (cb == n) return true;
-            if (cb < n) left = mid + 1;
-            else right = mid - 1;
-        }
-        return false;
-    }
-
-    // ============================================
-    // 47. ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½Å¼ï¿½ï¿½
-    // ============================================
-    bool isEvenBit(long long n)
-    {
-        return (n & 1) == 0;
-    }
-
-    // ============================================
-    // 48. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½0=ï¿½ï¿½ï¿½ï¿½, 1=ï¿½ï¿½Ò», ... 6=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    // ============================================
-    int dayOfWeek(int y, int m, int d)
-    {
-        // Ê¹ï¿½Ã»ï¿½Ä·ï¿½ï¿½ï¿½ï¿½É­ï¿½ï¿½Ê½
-        if (m < 3)
-        {
-            m += 12;
-            y--;
-        }
-        int c = y / 100;
-        int year = y % 100;
-        int w = (d + 2 * m + 3 * (m + 1) / 5 + year + year / 4 + c / 4 + 5 * c) % 7;
-        return w;
-    }
-
-    // ============================================
-    // 49. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-    // ============================================
-    int daysBetween(int y1, int m1, int d1, int y2, int m2, int d2)
-    {
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        auto daysSinceEpoch = [](int y, int m, int d)
-        {
-            int days = 0;
-            // ï¿½Ó¹ï¿½Ôª1ï¿½ê¿ªÊ¼ï¿½Û¼Ó£ï¿½ï¿½ò»¯°æ£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ç¹ï¿½ÔªÇ°ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-            // ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ£ï¿½ï¿½ï¿½ y1/y2 >= 1
-            for (int i = 1; i < y; i++)
-            {
-                days += isLeapYear(i) ? 366 : 365;
-            }
-            for (int i = 1; i < m; i++)
-            {
-                days += daysInMonth(y, i);
-            }
-            days += d - 1;
-            return days;
-        };
-
-        int days1 = daysSinceEpoch(y1, m1, d1);
-        int days2 = daysSinceEpoch(y2, m2, d2);
-        return days2 - days1;
-    }
-        // ============================================
-    // 50. ï¿½Ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½
-    // ============================================
-    bool isDescending(long long a[], int n)
-    {
-        if (n <= 1) return true;
-        for (int i = 1; i < n; i++)
-        {
-            if (a[i] > a[i - 1]) return false;
-        }
-        return true;
-    }
-
-    // ============================================
-    // 51. ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½6kï¿½ï¿½1 ï¿½Å»ï¿½ï¿½ï¿½
-    // ============================================
-    bool isPrimeFast(long long n)
-    {
-        if (n <= 1) return false;
-        if (n == 2 || n == 3) return true;
-        if (n % 2 == 0 || n % 3 == 0) return false;
-
-        for (long long i = 5; i * i <= n; i += 6)
-        {
-            if (n % i == 0 || n % (i + 2) == 0) return false;
-        }
-        return true;
-    }
-
-    // ============================================
-    // 52. ï¿½æ»»ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ö·ï¿½
-    // ============================================
-    std::string replaceChar(const std::string& str, char oldChar, char newChar)
-    {
-        std::string result = str;
-        for (char& c : result)
-        {
-            if (c == oldChar) c = newChar;
-        }
-        return result;
-    }
-        // ============================================
-    // å¿«é€Ÿæ’åºï¼ˆå‡åºï¼‰
-    // ============================================
-    void quickSort(long long a[], int l, int r)
-    {
-        if (l >= r) return;
-        int i = l, j = r;
-        long long pivot = a[(l + r) / 2];
-        while (i <= j)
-        {
-            while (a[i] < pivot) i++;
-            while (a[j] > pivot) j--;
-            if (i <= j)
-            {
-                std::swap(a[i], a[j]);
-                i++;
-                j--;
-            }
-        }
-        quickSort(a, l, j);
-        quickSort(a, i, r);
-    }
-
-    // ============================================
-    // å½’å¹¶æ’åºï¼ˆå‡åºï¼‰
-    // ============================================
-    void mergeSort(long long a[], int l, int r)
-    {
-        if (l >= r) return;
-        int mid = (l + r) / 2;
-        mergeSort(a, l, mid);
-        mergeSort(a, mid + 1, r);
-
-        long long* temp = new long long[r - l + 1];
-        int i = l, j = mid + 1, k = 0;
-        while (i <= mid && j <= r)
-        {
-            if (a[i] <= a[j]) temp[k++] = a[i++];
-            else temp[k++] = a[j++];
-        }
-        while (i <= mid) temp[k++] = a[i++];
-        while (j <= r) temp[k++] = a[j++];
-        for (int p = 0; p < k; p++) a[l + p] = temp[p];
-        delete[] temp;
-    }
-
-    // ============================================
-    // äºŒåˆ†æŸ¥æ‰¾ï¼ˆæ•°ç»„å¿…é¡»å‡åºï¼‰
-    // ============================================
-    int binarySearch(long long a[], int n, long long x)
-    {
-        int l = 0, r = n - 1;
-        while (l <= r)
-        {
-            int mid = l + (r - l) / 2;
-            if (a[mid] == x) return mid;
-            if (a[mid] < x) l = mid + 1;
-            else r = mid - 1;
-        }
-        return -1;
-    }
-
-    // ============================================
-    // æœ€é•¿å…¬å…±å‰ç¼€
-    // ============================================
-    std::string longestCommonPrefix(const std::string& a, const std::string& b)
-    {
-        int len = std::min(a.length(), b.length());
-        int i = 0;
-        while (i < len && a[i] == b[i]) i++;
-        return a.substr(0, i);
-    }
-
-    // ============================================
-    // ç¼–è¾‘è·ç¦»ï¼ˆLevenshtein Distanceï¼‰
-    // ============================================
-    int editDistance(const std::string& a, const std::string& b)
-    {
-        int n = a.length(), m = b.length();
-        std::vector<std::vector<int>> dp(n + 1, std::vector<int>(m + 1));
-        for (int i = 0; i <= n; i++) dp[i][0] = i;
-        for (int j = 0; j <= m; j++) dp[0][j] = j;
-        for (int i = 1; i <= n; i++)
-        {
-            for (int j = 1; j <= m; j++)
-            {
-                if (a[i - 1] == b[j - 1])
-                    dp[i][j] = dp[i - 1][j - 1];
-                else
-                    dp[i][j] = std::min({dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]}) + 1;
-            }
-        }
-        return dp[n][m];
-    }
-
-    // ============================================
-    // æœ€å¤§å­æ•°ç»„å’Œï¼ˆKadane ç®—æ³•ï¼‰
-    // ============================================
-    long long maxSubarraySum(long long a[], int n)
-    {
-        long long current = a[0], best = a[0];
-        for (int i = 1; i < n; i++)
-        {
-            current = std::max(a[i], current + a[i]);
-            best = std::max(best, current);
-        }
-        return best;
-    }
-
-    // ============================================
-    // å¾ªç¯å³ç§» k ä½
-    // ============================================
-    void rotateArray(long long a[], int n, int k)
-    {
-        k %= n;
-        if (k < 0) k += n;
-        if (k == 0) return;
-        reverseArr(a, n);
-        reverseArr(a, k);
-        reverseArr(a + k, n - k);
-    }
-
-    // ============================================
-    // åŸåœ°å»é‡ï¼ˆè¿”å›å»é‡åé•¿åº¦ï¼‰
-    // ============================================
-    int removeDuplicates(long long a[], int n)
-    {
-        if (n <= 1) return n;
-        quickSort(a, 0, n - 1);
-        int j = 0;
-        for (int i = 1; i < n; i++)
-        {
-            if (a[i] != a[j]) a[++j] = a[i];
-        }
-        return j + 1;
-    }
-
-    // ============================================
-    // åˆ¤æ–­é˜¿å§†æ–¯ç‰¹æœ—æ•°
-    // ============================================
-    bool isArmstrong(long long n)
-    {
-        if (n < 0) return false;
-        long long original = n, sum = 0;
-        int digits = 0, temp = n;
-        while (temp > 0) { temp /= 10; digits++; }
-        temp = n;
-        while (temp > 0)
-        {
-            int digit = temp % 10;
-            sum += power(digit, digits);
-            temp /= 10;
-        }
-        return sum == original;
-    }
-
-    // ============================================
-    // æ‰©å±•æ¬§å‡ é‡Œå¾—ç®—æ³•
-    // ============================================
-    long long gcdExtended(long long a, long long b, long long& x, long long& y)
-    {
-        if (b == 0) { x = 1; y = 0; return a; }
-        long long x1, y1;
-        long long g = gcdExtended(b, a % b, x1, y1);
-        x = y1;
-        y = x1 - (a / b) * y1;
-        return g;
-    }
-
-    // ============================================
-    // æ¨¡é€†å…ƒï¼ˆéœ€è¦ a ä¸ mod äº’è´¨ï¼‰
-    // ============================================
-    long long modInverse(long long a, long long mod)
-    {
-        long long x, y;
-        long long g = gcdExtended(a, mod, x, y);
-        if (g != 1) return -1;
-        return (x % mod + mod) % mod;
-    }
-
-    // ============================================
-    // è¿”å› n çš„äºŒè¿›åˆ¶æœ€ä½ä½ 1 çš„å€¼
-    // ============================================
-    long long lowbit(long long n)
-    {
-        return n & -n;
-    }
-
-    // ============================================
-    // åˆ¤æ–­æ˜¯å¦ä¸º 4 çš„å¹‚
-    // ============================================
-    bool isPowerOfFour(long long n)
-    {
-        if (n <= 0) return false;
-        return (n & (n - 1)) == 0 && (n % 3 == 1);
-    }
-
-    // ============================================
-    // ä¸‹ä¸€ä¸ªæ’åˆ—ï¼ˆè¿”å› true å¦‚æœæœ‰ï¼‰
-    // ============================================
-    bool nextPermutation(long long a[], int n)
-    {
-        int i = n - 2;
-        while (i >= 0 && a[i] >= a[i + 1]) i--;
-        if (i < 0) return false;
-        int j = n - 1;
-        while (a[j] <= a[i]) j--;
-        std::swap(a[i], a[j]);
-        int l = i + 1, r = n - 1;
-        while (l < r) std::swap(a[l++], a[r--]);
-        return true;
-    }
-
-    // ============================================
-    // è®¡ç®—å¹´é¾„ï¼ˆå¹´æ•°ï¼‰
-    // ============================================
-    int age(int y1, int m1, int d1, int y2, int m2, int d2)
-    {
-        int years = y2 - y1;
-        if (m2 < m1 || (m2 == m1 && d2 < d1)) years--;
-        return years;
-    }
+	// ============================================
+	// 1. ¿ìËÙÃİ a^b
+	// ============================================
+	long long power(long long a, long long b)
+	{
+		if (b < 0) return 0;
+
+		long long result = 1;
+		while (b > 0)
+		{
+			if (b & 1) result *= a;
+			a *= a;
+			b >>= 1;
+		}
+		return result;
+	}
+
+	// ============================================
+	// 2. ×î´ó¹«Ô¼Êı£¨Õ·×ªÏà³ı·¨£©
+	// ============================================
+	long long gcd(long long a, long long b)
+	{
+		if (a < 0) a = -a;
+		if (b < 0) b = -b;
+
+		while (b != 0)
+		{
+			long long temp = b;
+			b = a % b;
+			a = temp;
+		}
+		return a;
+	}
+
+	// ============================================
+	// 3. ×îĞ¡¹«±¶Êı
+	// ============================================
+	long long lcm(long long a, long long b)
+	{
+		if (a == 0 || b == 0) return 0;
+		return a / gcd(a, b) * b;
+	}
+
+	// ============================================
+	// 4. È¡Ä£¿ìËÙÃİ (a^b) % mod
+	// ============================================
+	long long pmod(long long a, long long b, long long mod)
+	{
+		if (mod == 1) return 0;
+
+		long long result = 1;
+		a %= mod;
+
+		while (b > 0)
+		{
+			if (b & 1)
+			{
+				result = (result * a) % mod;
+			}
+			a = (a * a) % mod;
+			b >>= 1;
+		}
+		return result;
+	}
+
+	// ============================================
+	// 5. ÅĞ¶ÏËØÊı
+	// ============================================
+	bool isPrime(long long n)
+	{
+		if (n <= 1) return false;
+		if (n == 2) return true;
+		if (n % 2 == 0) return false;
+
+		for (long long i = 3; i <= n / i; i += 2)
+		{
+			if (n % i == 0) return false;
+		}
+		return true;
+	}
+
+	// ============================================
+	// 6. ¸÷Î»Êı×ÖÖ®ºÍ
+	// ============================================
+	long long numSum(long long n)
+	{
+		if (n < 0) n = -n;
+
+		long long sum = 0;
+		while (n > 0)
+		{
+			sum += n % 10;
+			n /= 10;
+		}
+		return sum;
+	}
+
+	// ============================================
+	// 7. Êı×Ö·´×ª
+	// ============================================
+	long long rvsNum(long long n)
+	{
+		if (n < 0) n = -n;
+
+		long long reversed = 0;
+		while (n > 0)
+		{
+			reversed = reversed * 10 + (n % 10);
+			n /= 10;
+		}
+		return reversed;
+	}
+
+	// ============================================
+	// 8. Ê®½øÖÆ ×ª base ½øÖÆ (2~8)
+	// ============================================
+	long long tBase(long long n, int base)
+	{
+		if (base < 2 || base > 8) return -1;
+		if (n == 0) return 0;
+
+		long long result = 0;
+		long long multiplier = 1;
+		bool isNegative = false;
+
+		if (n < 0)
+		{
+			isNegative = true;
+			n = -n;
+		}
+
+		while (n > 0)
+		{
+			int digit = n % base;
+			result += digit * multiplier;
+			multiplier *= 10;
+			n /= base;
+		}
+
+		return isNegative ? -result : result;
+	}
+
+	// ============================================
+	// 9. base ½øÖÆ ×ª Ê®½øÖÆ (2~8)
+	// ============================================
+	long long fBase(long long n, int base)
+	{
+		if (base < 2 || base > 8) return -1;
+		if (n == 0) return 0;
+
+		long long result = 0;
+		long long multiplier = 1;
+		bool isNegative = false;
+
+		if (n < 0)
+		{
+			isNegative = true;
+			n = -n;
+		}
+
+		while (n > 0)
+		{
+			int digit = n % 10;
+			if (digit >= base) return -1;
+
+			result += digit * multiplier;
+			multiplier *= base;
+			n /= 10;
+		}
+
+		return isNegative ? -result : result;
+	}
+
+	// ============================================
+	// 10. ÅÅÁĞÊı P(n,m)
+	// ============================================
+	long long Permu(long long n, long long m)
+	{
+		if (m < 0 || m > n) return 0;
+
+		long long result = 1;
+		for (long long i = n; i > n - m; i--)
+		{
+			result *= i;
+		}
+		return result;
+	}
+
+	// ============================================
+	// 11. ×éºÏÊı C(n,m)
+	// ============================================
+	long long Combi(long long n, long long m)
+	{
+		if (m < 0 || m > n) return 0;
+		if (m > n - m) m = n - m;
+
+		long long result = 1;
+		for (long long i = 1; i <= m; i++)
+		{
+			result = result * (n - m + i) / i;
+		}
+		return result;
+	}
+
+	// ============================================
+	// 12. ½×³Ë n!
+	// ============================================
+	long long fact(long long n)
+	{
+		if (n < 0) return -1;
+		if (n == 0 || n == 1) return 1;
+
+		long long result = 1;
+		for (long long i = 2; i <= n; i++)
+		{
+			result *= i;
+		}
+		return result;
+	}
+
+	// ============================================
+	// 13. ì³²¨ÄÇÆõÊıÁĞµÄµÚ n Ïî
+	// ============================================
+	long long fib(long long n)
+	{
+		if (n < 0) return -1;
+		if (n == 0) return 0;
+		if (n == 1 || n == 2) return 1;
+
+		long long a = 0, b = 1;
+		for (long long i = 2; i <= n; i++)
+		{
+			long long temp = a + b;
+			a = b;
+			b = temp;
+		}
+		return b;
+	}
+
+	// ============================================
+	// 14. »ØÎÄÊıÅĞ¶Ï
+	// ============================================
+	bool isPalind(long long n)
+	{
+		if (n < 0) return false;
+		return n == rvsNum(n);
+	}
+
+	// ============================================
+	// 15. Êı×é×î´óÖµ
+	// ============================================
+	long long maxVal(long long a[], int n)
+	{
+		if (n <= 0) return 0;
+		long long result = a[0];
+		for (int i = 1; i < n; i++)
+		{
+			if (a[i] > result) result = a[i];
+		}
+		return result;
+	}
+
+	// ============================================
+	// 16. Êı×é×îĞ¡Öµ
+	// ============================================
+	long long minVal(long long a[], int n)
+	{
+		if (n <= 0) return 0;
+		long long result = a[0];
+		for (int i = 1; i < n; i++)
+		{
+			if (a[i] < result) result = a[i];
+		}
+		return result;
+	}
+
+	// ============================================
+	// 17. Êı×éÇóºÍ
+	// ============================================
+	long long sumArr(long long a[], int n)
+	{
+		long long result = 0;
+		for (int i = 0; i < n; i++)
+		{
+			result += a[i];
+		}
+		return result;
+	}
+
+	// ============================================
+	// 18. Êı×éÆ½¾ùÖµ
+	// ============================================
+	double avgArr(long long a[], int n)
+	{
+		if (n <= 0) return 0.0;
+		return (double)sumArr(a, n) / n;
+	}
+
+	// ============================================
+	// 19. ·´×ªÊı×é
+	// ============================================
+	void reverseArr(long long a[], int n)
+	{
+		for (int i = 0; i < n / 2; i++)
+		{
+			std::swap(a[i], a[n - i - 1]);
+		}
+	}
+
+	// ============================================
+	// 20. Í³¼ÆÔªËØ³öÏÖ´ÎÊı
+	// ============================================
+	int countOccur(long long a[], int n, long long x)
+	{
+		int count = 0;
+		for (int i = 0; i < n; i++)
+		{
+			if (a[i] == x) count++;
+		}
+		return count;
+	}
+
+	// ============================================
+	// 21. ×ª´óĞ´
+	// ============================================
+	std::string toUpper(const std::string& str)
+	{
+		std::string result = str;
+		for (char& c : result)
+		{
+			if (c >= 'a' && c <= 'z') c -= 32;
+		}
+		return result;
+	}
+
+	// ============================================
+	// 22. ×ªĞ¡Ğ´
+	// ============================================
+	std::string toLower(const std::string& str)
+	{
+		std::string result = str;
+		for (char& c : result)
+		{
+			if (c >= 'A' && c <= 'Z') c += 32;
+		}
+		return result;
+	}
+
+	// ============================================
+	// 23. ×Ö·û´®³¤¶È
+	// ============================================
+	int strLen(const std::string& str)
+	{
+		return (int)str.length();
+	}
+
+	// ============================================
+	// 24. ·´×ª×Ö·û´®
+	// ============================================
+	std::string strReverse(const std::string& str)
+	{
+		std::string result = str;
+		int n = result.length();
+		for (int i = 0; i < n / 2; i++)
+		{
+			std::swap(result[i], result[n - i - 1]);
+		}
+		return result;
+	}
+
+	// ============================================
+	// 25. ×ÖÄ¸ÒìÎ»´ÊÅĞ¶Ï
+	// ============================================
+	bool isAnagram(const std::string& a, const std::string& b)
+	{
+		if (a.length() != b.length()) return false;
+
+		std::string s1 = toLower(a);
+		std::string s2 = toLower(b);
+
+		std::sort(s1.begin(), s1.end());
+		std::sort(s2.begin(), s2.end());
+
+		return s1 == s2;
+	}
+
+	// ============================================
+	// 26. Í³¼ÆÔªÒô×ÖÄ¸Êı
+	// ============================================
+	int countVowels(const std::string& str)
+	{
+		int count = 0;
+		static const std::string vowels = "aeiouAEIOU";
+		for (char c : str)
+		{
+			if (vowels.find(c) != std::string::npos) count++;
+		}
+		return count;
+	}
+
+	// ============================================
+	// 27. Í³¼Æ¸¨Òô×ÖÄ¸Êı
+	// ============================================
+	int countConsonants(const std::string& str)
+	{
+		int count = 0;
+		static const std::string consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ";
+		for (char c : str)
+		{
+			if (consonants.find(c) != std::string::npos) count++;
+		}
+		return count;
+	}
+
+	// ============================================
+	// 28. ¾ø¶ÔÖµ
+	// ============================================
+	long long absInt(long long n)
+	{
+		return n < 0 ? -n : n;
+	}
+
+	// ============================================
+	// 29. ÈıÊı×î´óÖµ
+	// ============================================
+	long long max3(long long a, long long b, long long c)
+	{
+		return std::max(std::max(a, b), c);
+	}
+
+	// ============================================
+	// 30. ÈıÊı×îĞ¡Öµ
+	// ============================================
+	long long min3(long long a, long long b, long long c)
+	{
+		return std::min(std::min(a, b), c);
+	}
+
+	// ============================================
+	// 31. ÅĞ¶ÏÅ¼Êı
+	// ============================================
+	bool isEven(long long n)
+	{
+		return n % 2 == 0;
+	}
+
+	// ============================================
+	// 32. ÅĞ¶ÏÆæÊı
+	// ============================================
+	bool isOdd(long long n)
+	{
+		return n % 2 != 0;
+	}
+
+	// ============================================
+	// 33. Æ½·½
+	// ============================================
+	long long sqr(long long n)
+	{
+		return n * n;
+	}
+
+	// ============================================
+	// 34. ÅĞ¶ÏÊÇ·ñÎª 2 µÄÃİ
+	// ============================================
+	bool isPowerOfTwo(long long n)
+	{
+		if (n <= 0) return false;
+		return (n & (n - 1)) == 0;
+	}
+
+	// ============================================
+	// 35. ¶ş½øÖÆÖĞ 1 µÄ¸öÊı
+	// ============================================
+	int countBits(long long n)
+	{
+		unsigned long long x = (unsigned long long)n;
+		int count = 0;
+		while (x > 0)
+		{
+			x &= x - 1;
+			count++;
+		}
+		return count;
+	}
+
+	// ============================================
+	// 36. ·´×ªµÍ 32 Î»±ÈÌØ
+	// ============================================
+	long long reverseBits(long long n)
+	{
+		unsigned long long x = (unsigned long long)n;
+		unsigned long long result = 0;
+		for (int i = 0; i < 32; i++)
+		{
+			result = (result << 1) | (x & 1);
+			x >>= 1;
+		}
+		return (long long)result;
+	}
+
+	// ============================================
+	// 37. ÅĞ¶ÏÈòÄê
+	// ============================================
+	bool isLeapYear(int y)
+	{
+		if (y < 0) y = -y;
+		return (y % 400 == 0) || (y % 4 == 0 && y % 100 != 0);
+	}
+
+	// ============================================
+	// 38. ÔÂ·İÌìÊı
+	// ============================================
+	int daysInMonth(int y, int m)
+	{
+		if (m < 1 || m > 12) return -1;
+
+		int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+		if (m == 2 && isLeapYear(y)) return 29;
+		return days[m - 1];
+	}
+
+	// ============================================
+	// 39. ÅĞ¶ÏÈÕÆÚÊÇ·ñºÏ·¨
+	// ============================================
+	bool isValidDate(int y, int m, int d)
+	{
+		if (m < 1 || m > 12) return false;
+		if (d < 1) return false;
+
+		int maxDay = daysInMonth(y, m);
+		if (maxDay == -1) return false;
+
+		return d <= maxDay;
+	}
+
+	// ============================================
+	// 40. ÅĞ¶ÏÊı×éÊÇ·ñÉıĞò
+	// ============================================
+	bool isSorted(long long a[], int n)
+	{
+		if (n <= 1) return true;
+		for (int i = 1; i < n; i++)
+		{
+			if (a[i] < a[i - 1]) return false;
+		}
+		return true;
+	}
+
+	// ============================================
+	// 41. ²éÕÒÔªËØÊ×´Î³öÏÖÎ»ÖÃ
+	// ============================================
+	int findIndex(long long a[], int n, long long x)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			if (a[i] == x) return i;
+		}
+		return -1;
+	}
+
+	// ============================================
+	// 42. ÅĞ¶Ï×Ö·û´®ÊÇ·ñÎª»ØÎÄ
+	// ============================================
+	bool isPalindromeStr(const std::string& str)
+	{
+		int left = 0;
+		int right = str.length() - 1;
+		while (left < right)
+		{
+			if (str[left] != str[right]) return false;
+			left++;
+			right--;
+		}
+		return true;
+	}
+
+	// ============================================
+	// 43. Í³¼Æµ¥´ÊÊıÁ¿
+	// ============================================
+	int countWords(const std::string& str)
+	{
+		if (str.empty()) return 0;
+
+		int count = 0;
+		bool inWord = false;
+
+		for (char c : str)
+		{
+			if (c == ' ' || c == '\t' || c == '\n')
+			{
+				inWord = false;
+			}
+			else if (!inWord)
+			{
+				inWord = true;
+				count++;
+			}
+		}
+		return count;
+	}
+
+	// ============================================
+	// 44. Á¢·½
+	// ============================================
+	long long cube(long long n)
+	{
+		return n * n * n;
+	}
+
+	// ============================================
+	// 45. ÅĞ¶ÏÍêÈ«Æ½·½Êı
+	// ============================================
+	bool isPerfectSquare(long long n)
+	{
+		if (n < 0) return false;
+		if (n == 0 || n == 1) return true;
+
+		long long left = 1, right = n;
+		while (left <= right)
+		{
+			long long mid = left + (right - left) / 2;
+			long long sq = mid * mid;
+			if (sq == n) return true;
+			if (sq < n) left = mid + 1;
+			else right = mid - 1;
+		}
+		return false;
+	}
+
+	// ============================================
+	// 46. ÅĞ¶ÏÍêÈ«Á¢·½Êı
+	// ============================================
+	bool isPerfectCube(long long n)
+	{
+		if (n < 0) n = -n;
+		if (n == 0 || n == 1) return true;
+
+		long long left = 1, right = n;
+		while (left <= right)
+		{
+			long long mid = left + (right - left) / 2;
+			long long cb = mid * mid * mid;
+			if (cb == n) return true;
+			if (cb < n) left = mid + 1;
+			else right = mid - 1;
+		}
+		return false;
+	}
+
+	// ============================================
+	// 47. ÓÃÎ»ÔËËãÅĞ¶ÏÅ¼Êı
+	// ============================================
+	bool isEvenBit(long long n)
+	{
+		return (n & 1) == 0;
+	}
+
+	// ============================================
+	// 48. ¼ÆËãĞÇÆÚ¼¸£¨»ùÄ·À­¶ûÉ­¹«Ê½£©
+	// ============================================
+	int dayOfWeek(int y, int m, int d)
+	{
+		if (m < 3)
+		{
+			m += 12;
+			y--;
+		}
+		int c = y / 100;
+		int year = y % 100;
+		int w = (d + 2 * m + 3 * (m + 1) / 5 + year + year / 4 + c / 4 + 5 * c) % 7;
+		return w;
+	}
+
+	// ============================================
+	// 49. ¼ÆËãÁ½¸öÈÕÆÚÏà²îµÄÌìÊı
+	// ============================================
+	int daysBetween(int y1, int m1, int d1, int y2, int m2, int d2)
+	{
+		auto daysSinceEpoch = [](int y, int m, int d)
+		{
+			int days = 0;
+			for (int i = 1; i < y; i++)
+			{
+				days += isLeapYear(i) ? 366 : 365;
+			}
+			for (int i = 1; i < m; i++)
+			{
+				days += daysInMonth(y, i);
+			}
+			days += d - 1;
+			return days;
+		};
+
+		int days1 = daysSinceEpoch(y1, m1, d1);
+		int days2 = daysSinceEpoch(y2, m2, d2);
+		return days2 - days1;
+	}
+
+	// ============================================
+	// 50. ÅĞ¶ÏÊı×éÊÇ·ñ½µĞò
+	// ============================================
+	bool isDescending(long long a[], int n)
+	{
+		if (n <= 1) return true;
+		for (int i = 1; i < n; i++)
+		{
+			if (a[i] > a[i - 1]) return false;
+		}
+		return true;
+	}
+
+	// ============================================
+	// 51. ¿ìËÙÅĞ¶ÏÖÊÊı£¨6k¡À1 ÓÅ»¯£©
+	// ============================================
+	bool isPrimeFast(long long n)
+	{
+		if (n <= 1) return false;
+		if (n == 2 || n == 3) return true;
+		if (n % 2 == 0 || n % 3 == 0) return false;
+
+		for (long long i = 5; i * i <= n; i += 6)
+		{
+			if (n % i == 0 || n % (i + 2) == 0) return false;
+		}
+		return true;
+	}
+
+	// ============================================
+	// 52. Ìæ»»×Ö·û´®ÖĞËùÓĞÖ¸¶¨×Ö·û
+	// ============================================
+	std::string replaceChar(const std::string& str, char oldChar, char newChar)
+	{
+		std::string result = str;
+		for (char& c : result)
+		{
+			if (c == oldChar) c = newChar;
+		}
+		return result;
+	}
+
+	// ============================================
+	// 53. ¿ìËÙÅÅĞò
+	// ============================================
+	void quickSort(long long a[], int l, int r)
+	{
+		if (l >= r) return;
+		int i = l, j = r;
+		long long pivot = a[(l + r) / 2];
+		while (i <= j)
+		{
+			while (a[i] < pivot) i++;
+			while (a[j] > pivot) j--;
+			if (i <= j)
+			{
+				std::swap(a[i], a[j]);
+				i++;
+				j--;
+			}
+		}
+		quickSort(a, l, j);
+		quickSort(a, i, r);
+	}
+
+	// ============================================
+	// 54. ¹é²¢ÅÅĞò
+	// ============================================
+	void mergeSort(long long a[], int l, int r)
+	{
+		if (l >= r) return;
+		int mid = (l + r) / 2;
+		mergeSort(a, l, mid);
+		mergeSort(a, mid + 1, r);
+
+		std::vector<long long> temp(r - l + 1);
+		int i = l, j = mid + 1, k = 0;
+		while (i <= mid && j <= r)
+		{
+			if (a[i] <= a[j]) temp[k++] = a[i++];
+			else temp[k++] = a[j++];
+		}
+		while (i <= mid) temp[k++] = a[i++];
+		while (j <= r) temp[k++] = a[j++];
+		for (int p = 0; p < k; p++) a[l + p] = temp[p];
+	}
+
+	// ============================================
+	// 55. ¶ş·Ö²éÕÒ
+	// ============================================
+	int binarySearch(long long a[], int n, long long x)
+	{
+		int l = 0, r = n - 1;
+		while (l <= r)
+		{
+			int mid = l + (r - l) / 2;
+			if (a[mid] == x) return mid;
+			if (a[mid] < x) l = mid + 1;
+			else r = mid - 1;
+		}
+		return -1;
+	}
+
+	// ============================================
+	// 56. ×î³¤¹«¹²Ç°×º
+	// ============================================
+	std::string longestCommonPrefix(const std::string& a, const std::string& b)
+	{
+		int len = std::min(a.length(), b.length());
+		int i = 0;
+		while (i < len && a[i] == b[i]) i++;
+		return a.substr(0, i);
+	}
+
+	// ============================================
+	// 57. ±à¼­¾àÀë
+	// ============================================
+	int editDistance(const std::string& a, const std::string& b)
+	{
+		int n = a.length(), m = b.length();
+		std::vector<std::vector<int>> dp(n + 1, std::vector<int>(m + 1));
+		for (int i = 0; i <= n; i++) dp[i][0] = i;
+		for (int j = 0; j <= m; j++) dp[0][j] = j;
+		for (int i = 1; i <= n; i++)
+		{
+			for (int j = 1; j <= m; j++)
+			{
+				if (a[i - 1] == b[j - 1])
+					dp[i][j] = dp[i - 1][j - 1];
+				else
+					dp[i][j] = std::min({dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]}) + 1;
+			}
+		}
+		return dp[n][m];
+	}
+
+	// ============================================
+	// 58. ×î´ó×ÓÊı×éºÍ£¨Kadane Ëã·¨£©
+	// ============================================
+	long long maxSubarraySum(long long a[], int n)
+	{
+		long long current = a[0], best = a[0];
+		for (int i = 1; i < n; i++)
+		{
+			current = std::max(a[i], current + a[i]);
+			best = std::max(best, current);
+		}
+		return best;
+	}
+
+	// ============================================
+	// 59. Ñ­»·ÓÒÒÆ k Î»
+	// ============================================
+	void rotateArray(long long a[], int n, int k)
+	{
+		k %= n;
+		if (k < 0) k += n;
+		if (k == 0) return;
+		reverseArr(a, n);
+		reverseArr(a, k);
+		reverseArr(a + k, n - k);
+	}
+
+	// ============================================
+	// 60. Ô­µØÈ¥ÖØ
+	// ============================================
+	int removeDuplicates(long long a[], int n)
+	{
+		if (n <= 1) return n;
+		quickSort(a, 0, n - 1);
+		int j = 0;
+		for (int i = 1; i < n; i++)
+		{
+			if (a[i] != a[j]) a[++j] = a[i];
+		}
+		return j + 1;
+	}
+
+	// ============================================
+	// 61. ÅĞ¶Ï°¢Ä·Ë¹ÌØÀÊÊı
+	// ============================================
+	bool isArmstrong(long long n)
+	{
+		if (n < 0) return false;
+		long long original = n, sum = 0;
+		int digits = 0, temp = n;
+		while (temp > 0) { temp /= 10; digits++; }
+		temp = n;
+		while (temp > 0)
+		{
+			int digit = temp % 10;
+			sum += power(digit, digits);
+			temp /= 10;
+		}
+		return sum == original;
+	}
+
+	// ============================================
+	// 62. À©Õ¹Å·¼¸ÀïµÃËã·¨
+	// ============================================
+	long long gcdExtended(long long a, long long b, long long& x, long long& y)
+	{
+		if (b == 0) { x = 1; y = 0; return a; }
+		long long x1, y1;
+		long long g = gcdExtended(b, a % b, x1, y1);
+		x = y1;
+		y = x1 - (a / b) * y1;
+		return g;
+	}
+
+	// ============================================
+	// 63. Ä£ÄæÔª
+	// ============================================
+	long long modInverse(long long a, long long mod)
+	{
+		long long x, y;
+		long long g = gcdExtended(a, mod, x, y);
+		if (g != 1) return -1;
+		return (x % mod + mod) % mod;
+	}
+
+	// ============================================
+	// 64. ·µ»Ø×îµÍÎ»1µÄÖµ
+	// ============================================
+	long long lowbit(long long n)
+	{
+		return n & -n;
+	}
+
+	// ============================================
+	// 65. ÅĞ¶ÏÊÇ·ñÎª4µÄÃİ
+	// ============================================
+	bool isPowerOfFour(long long n)
+	{
+		if (n <= 0) return false;
+		return (n & (n - 1)) == 0 && (n % 3 == 1);
+	}
+
+	// ============================================
+	// 66. ÏÂÒ»¸öÅÅÁĞ
+	// ============================================
+	bool nextPermutation(long long a[], int n)
+	{
+		int i = n - 2;
+		while (i >= 0 && a[i] >= a[i + 1]) i--;
+		if (i < 0) return false;
+		int j = n - 1;
+		while (a[j] <= a[i]) j--;
+		std::swap(a[i], a[j]);
+		int l = i + 1, r = n - 1;
+		while (l < r) std::swap(a[l++], a[r--]);
+		return true;
+	}
+
+	// ============================================
+	// 67. ¼ÆËãÄêÁä
+	// ============================================
+	int age(int y1, int m1, int d1, int y2, int m2, int d2)
+	{
+		int years = y2 - y1;
+		if (m2 < m1 || (m2 == m1 && d2 < d1)) years--;
+		return years;
+	}
+
+	// ============================================
+	// 68. Ã°ÅİÅÅĞò
+	// ============================================
+	void bubbleSort(long long a[], int n)
+	{
+		for (int i = 0; i < n - 1; i++)
+		{
+			bool swapped = false;
+			for (int j = 0; j < n - i - 1; j++)
+			{
+				if (a[j] > a[j + 1])
+				{
+					std::swap(a[j], a[j + 1]);
+					swapped = true;
+				}
+			}
+			if (!swapped) break;
+		}
+	}
+
+	// ============================================
+	// 69. Ñ¡ÔñÅÅĞò
+	// ============================================
+	void selectionSort(long long a[], int n)
+	{
+		for (int i = 0; i < n - 1; i++)
+		{
+			int minIdx = i;
+			for (int j = i + 1; j < n; j++)
+			{
+				if (a[j] < a[minIdx]) minIdx = j;
+			}
+			if (minIdx != i) std::swap(a[i], a[minIdx]);
+		}
+	}
+
+	// ============================================
+	// 70. ²åÈëÅÅĞò
+	// ============================================
+	void insertionSort(long long a[], int n)
+	{
+		for (int i = 1; i < n; i++)
+		{
+			long long key = a[i];
+			int j = i - 1;
+			while (j >= 0 && a[j] > key)
+			{
+				a[j + 1] = a[j];
+				j--;
+			}
+			a[j + 1] = key;
+		}
+	}
+
+	// ============================================
+	// 71. Ï£¶ûÅÅĞò
+	// ============================================
+	void shellSort(long long a[], int n)
+	{
+		for (int gap = n / 2; gap > 0; gap /= 2)
+		{
+			for (int i = gap; i < n; i++)
+			{
+				long long temp = a[i];
+				int j = i;
+				while (j >= gap && a[j - gap] > temp)
+				{
+					a[j] = a[j - gap];
+					j -= gap;
+				}
+				a[j] = temp;
+			}
+		}
+	}
+
+	// ============================================
+	// 72. ¶ÑÅÅĞò¸¨Öúº¯Êı
+	// ============================================
+	void heapify(long long a[], int n, int i)
+	{
+		int largest = i;
+		int l = 2 * i + 1;
+		int r = 2 * i + 2;
+		if (l < n && a[l] > a[largest]) largest = l;
+		if (r < n && a[r] > a[largest]) largest = r;
+		if (largest != i)
+		{
+			std::swap(a[i], a[largest]);
+			heapify(a, n, largest);
+		}
+	}
+
+	// ============================================
+	// 73. ¶ÑÅÅĞò
+	// ============================================
+	void heapSort(long long a[], int n)
+	{
+		for (int i = n / 2 - 1; i >= 0; i--) heapify(a, n, i);
+		for (int i = n - 1; i > 0; i--)
+		{
+			std::swap(a[0], a[i]);
+			heapify(a, i, 0);
+		}
+	}
+
+	// ============================================
+	// 74. ¼ÆÊıÅÅĞò
+	// ============================================
+	void countingSort(long long a[], int n, long long maxVal)
+	{
+		if (n <= 1) return;
+		std::vector<long long> count(maxVal + 1, 0);
+		for (int i = 0; i < n; i++) count[a[i]]++;
+		int idx = 0;
+		for (long long i = 0; i <= maxVal; i++)
+		{
+			while (count[i] > 0)
+			{
+				a[idx++] = i;
+				count[i]--;
+			}
+		}
+	}
+
+	// ============================================
+	// 75. »ùÊıÅÅĞò
+	// ============================================
+	void radixSort(long long a[], int n)
+	{
+		if (n <= 1) return;
+		long long mx = maxVal(a, n);
+		std::vector<long long> output(n);
+		for (long long exp = 1; mx / exp > 0; exp *= 10)
+		{
+			int count[10] = {0};
+			for (int i = 0; i < n; i++) count[(a[i] / exp) % 10]++;
+			for (int i = 1; i < 10; i++) count[i] += count[i - 1];
+			for (int i = n - 1; i >= 0; i--)
+			{
+				output[count[(a[i] / exp) % 10] - 1] = a[i];
+				count[(a[i] / exp) % 10]--;
+			}
+			for (int i = 0; i < n; i++) a[i] = output[i];
+		}
+	}
+
+	// ============================================
+	// 76. Í°ÅÅĞò
+	// ============================================
+	void bucketSort(long long a[], int n)
+	{
+		if (n <= 1) return;
+		long long minV = minVal(a, n);
+		long long maxV = maxVal(a, n);
+		if (minV == maxV) return;
+
+		int bucketCount = n;
+		std::vector<std::vector<long long>> buckets(bucketCount);
+		for (int i = 0; i < n; i++)
+		{
+			int idx = (int)((a[i] - minV) * 1.0 / (maxV - minV + 1) * bucketCount);
+			if (idx >= bucketCount) idx = bucketCount - 1;
+			buckets[idx].push_back(a[i]);
+		}
+		int idx = 0;
+		for (int i = 0; i < bucketCount; i++)
+		{
+			insertionSort(buckets[i].data(), buckets[i].size());
+			for (long long val : buckets[i]) a[idx++] = val;
+		}
+	}
+
+	// ============================================
+	// 77. Çø¼äÅÅĞò
+	// ============================================
+	void sortRange(long long a[], int l, int r)
+	{
+		if (l < 0 || r < l) return;
+		quickSort(a, l, r);
+	}
+
+	// ============================================
+	// 78. ½µĞòÅÅĞò
+	// ============================================
+	void sortDescending(long long a[], int n)
+	{
+		quickSort(a, 0, n - 1);
+		reverseArr(a, n);
+	}
 }
