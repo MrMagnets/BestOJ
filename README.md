@@ -1,21 +1,33 @@
+
 # BestOJ - Best Optimized Journeys: C++ competitive programming snippets & function templates.
 # 好竞旅 - 最好的竞赛之旅：C++ 环境一键配置及常用库
+
 ## 官方交流群（QQ）：1105319703
-一个适用于算法竞赛（OI / ACM）的 C++ 常用函数库与安装程序，一键安装vscode（仅windows）并提供共 **54 个**常用函数，覆盖数组、字符串、数论、位运算、日期等类别。安装后可直接 `#include <BestOJ.h>` 使用。
-（可以仅安装vscode）
+
+一个适用于算法竞赛（OI / ACM）的 C++ 常用函数库与安装程序，一键安装 VS Code（仅 Windows）并提供共 **78 个**常用函数，覆盖排序、数组、字符串、数论、位运算、日期等类别。安装后可直接 `#include <BestOJ.h>` 使用。
+
+（可以仅安装 VS Code）
+
+---
 
 ## 特性
-- 及其方便：小白也能上手
+
+- 极其方便：小白也能上手
 - 零依赖：仅依赖 C++ 标准库，不包含任何 `bits/stdc++.h` 万能头
 - 不污染全局命名空间，所有函数均在 `BestOJ` 命名空间内
 - 提供 Windows / Linux 一键安装脚本
 - 跨平台自动使用当前 g++ 重新编译静态库，保证兼容
 
+---
+
 ## 安装
 
 ### Windows
-右键-以管理员身份运行BestOJ.bat。
-（可选-安装BestOJ库）
+
+右键-以管理员身份运行 `BestOJ.bat`。
+
+（可选-安装 BestOJ 库）
+
 双击运行 `Fast-Install.bat`，按提示选择：
 
 - `[1]` 自动检测并安装到 gcc 默认 include/lib 目录
@@ -47,9 +59,12 @@ chmod +x install.sh
 g++ main.cpp BestOJ.cpp -o main
 ```
 
+---
+
 ## 使用方法
-查看README_使用说明以了解如何使用vsocde。
-查看本项目readme.md以了解如何使用BestOJ库。
+
+查看 `README_使用说明` 了解如何使用 VS Code。
+查看本项目的 `README.md` 了解如何使用 BestOJ 库。
 
 ```cpp
 #include <BestOJ.h>
@@ -70,6 +85,8 @@ int main()
 ```cpp
 using namespace BestOJ;
 ```
+
+---
 
 ## 函数列表
 
@@ -117,6 +134,16 @@ using namespace BestOJ;
 |------|------|
 | `quickSort(a, l, r)` | 快速排序（升序） |
 | `mergeSort(a, l, r)` | 归并排序（升序） |
+| `bubbleSort(a, n)` | 冒泡排序（升序） |
+| `selectionSort(a, n)` | 选择排序（升序） |
+| `insertionSort(a, n)` | 插入排序（升序） |
+| `shellSort(a, n)` | 希尔排序（升序） |
+| `heapSort(a, n)` | 堆排序（升序） |
+| `countingSort(a, n, maxVal)` | 计数排序（非负整数） |
+| `radixSort(a, n)` | 基数排序（非负整数） |
+| `bucketSort(a, n)` | 桶排序 |
+| `sortRange(a, l, r)` | 对数组指定区间排序 |
+| `sortDescending(a, n)` | 降序排序 |
 
 ### 搜索
 | 函数 | 说明 |
@@ -187,16 +214,22 @@ using namespace BestOJ;
 | `dayOfWeek(y, m, d)` | 计算星期几（0=周日） |
 | `daysBetween(y1,m1,d1, y2,m2,d2)` | 计算两个日期相差天数 |
 | `age(y1,m1,d1, y2,m2,d2)` | 计算年龄（年数） |
+
+---
+
 ## 目录结构
 
 ```
 BestOJ.h         头文件（函数声明）
-BestOJ.cpp       实现文件 
-BestOJ.a
-Fast-Install.bat  Windows 安装脚本
-install.sh        Linux 安装脚本
+BestOJ.cpp       实现文件
+BestOJ.a         静态库
+Fast-Install.bat Windows 安装脚本
+install.sh       Linux 安装脚本
 ```
+
+---
 
 ## License
 
 [MIT](LICENSE)
+```
